@@ -1,5 +1,5 @@
 {
-  "name": "secretguard",
+  "name": "secretguard-cli",
   "version": "1.0.0",
   "description": "Stop secrets before they leak — pre-commit hook, git history audit, live API verification, 44 credential patterns",
   "bin": {

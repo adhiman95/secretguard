@@ -13,7 +13,7 @@
 ## Install
 
 ```bash
-npm install -g secretguard
+npm install -g secretguard-cli
 ```
 
 Then set up in your repo:
@@ -144,7 +144,7 @@ export SECRETGUARD_WEBHOOK_TOKEN=optional-bearer-token
 
 ```yaml
 - name: Install SecretGuard
-  run: npm install -g secretguard
+  run: npm install -g secretguard-cli
 
 - name: Scan for secrets
   run: secretguard scan . --fail-on=critical,high --format=sarif --output=secretguard.sarif
@@ -164,7 +164,7 @@ SARIF output integrates with GitHub Code Scanning for inline PR annotations.
 secret-scan:
   image: node:20-alpine
   script:
-    - npm install -g secretguard
+    - npm install -g secretguard-cli
     - secretguard scan . --fail-on=critical,high
   only:
     - merge_requests
