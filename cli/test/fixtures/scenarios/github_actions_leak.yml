@@ -1,0 +1,30 @@
+# Simulates GitHub Actions secrets accidentally printed to logs
+# or hardcoded directly in workflow file (real pattern seen in breaches)
+
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      # BAD: never hardcode secrets in workflow files — use ${{ secrets.NAME }}
+      AWS_ACCESS_KEY_ID: AKIAQRXNIELODEPLOYKEY
+      AWS_SECRET_ACCESS_KEY: deploySecretKeyHereXXXXXXXXXXXXXXXXXXXXXXXX
+      DOCKER_PASSWORD: "DockerHubP4ssw0rd!2024"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # BAD: this prints the secret to logs (seen in real incidents)
+      - name: Debug env
+        run: echo "Token is $GITHUB_TOKEN and key is $AWS_ACCESS_KEY_ID"
+
+      # BAD: hardcoded npm token (seen in supply chain attacks)
+      - name: Publish
+        run: |
+          echo "//registry.npmjs.org/:_authToken=npm_FAKE_EXAMPLE_TOKEN_0000000000" > ~/.npmrc
+          npm publish

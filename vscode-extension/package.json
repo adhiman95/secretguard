@@ -1,0 +1,66 @@
+{
+  "name": "secretguard",
+  "displayName": "SecretGuard",
+  "description": "Real-time secret detection — catches API keys, tokens, and credentials as you type",
+  "version": "1.0.0",
+  "publisher": "secretguard",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other", "Linters"],
+  "keywords": ["secrets", "security", "api-key", "credentials", "token"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "secretguard.scanFile",
+        "title": "SecretGuard: Scan Current File"
+      },
+      {
+        "command": "secretguard.scanWorkspace",
+        "title": "SecretGuard: Scan Workspace"
+      },
+      {
+        "command": "secretguard.ignoreRule",
+        "title": "SecretGuard: Ignore this finding"
+      }
+    ],
+    "configuration": {
+      "title": "SecretGuard",
+      "properties": {
+        "secretguard.enableRealtimeScan": {
+          "type": "boolean",
+          "default": true,
+          "description": "Scan files as you type (on save)"
+        },
+        "secretguard.severity": {
+          "type": "array",
+          "default": ["critical", "high", "medium"],
+          "description": "Severities to report"
+        },
+        "secretguard.cliPath": {
+          "type": "string",
+          "default": "secretguard",
+          "description": "Path to secretguard CLI (default: uses PATH)"
+        },
+        "secretguard.showInlineMessages": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show inline error decorations on secret lines"
+        }
+      }
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "secretguard.scanFile",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adhiman95/secretguard"
+  },
+  "license": "MIT"
+}

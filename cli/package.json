@@ -1,0 +1,37 @@
+{
+  "name": "secretguard",
+  "version": "1.0.0",
+  "description": "Stop secrets before they leak — pre-commit hook, git history audit, live API verification, 44 credential patterns",
+  "bin": {
+    "secretguard": "./bin/secretguard.js"
+  },
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "node test/run.js",
+    "prepublishOnly": "node test/run.js"
+  },
+  "keywords": [
+    "secrets", "security", "git", "credentials", "api-key", "pre-commit",
+    "secret-scanning", "gitleaks", "trufflehog", "devsecops", "token-detection"
+  ],
+  "author": "SecretGuard",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adhiman95/secretguard"
+  },
+  "homepage": "https://secretguard.dev",
+  "bugs": {
+    "url": "https://github.com/adhiman95/secretguard/issues"
+  },
+  "engines": { "node": ">=16" },
+  "files": [
+    "bin/",
+    "lib/",
+    "README.md"
+  ],
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "node-fetch": "^3.3.2"
+  }
+}

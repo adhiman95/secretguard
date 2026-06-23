@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecretGuard Docs — CLI Reference</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --bg2: #161b22;
+      --bg3: #21262d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --yellow: #d29922;
+      --orange: #db6d28;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    /* Sidebar */
+    nav {
+      width: 260px;
+      min-width: 260px;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .nav-logo { padding: 0 20px 24px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .nav-logo a { text-decoration: none; color: var(--text); font-weight: 700; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+    .nav-logo span { font-size: 22px; }
+    nav h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 8px 20px 4px; }
+    nav a { display: block; padding: 6px 20px; color: var(--muted); text-decoration: none; font-size: 14px; border-left: 2px solid transparent; }
+    nav a:hover, nav a.active { color: var(--text); border-left-color: var(--accent); background: var(--bg3); }
+    nav .badge { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 10px; background: var(--red); color: #fff; margin-left: 6px; vertical-align: middle; }
+
+    /* Content */
+    main { flex: 1; padding: 48px 64px; max-width: 900px; }
+    h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+    h2 { font-size: 22px; font-weight: 600; margin: 48px 0 16px; padding-top: 48px; border-top: 1px solid var(--border); color: var(--text); }
+    h2:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+    h3 { font-size: 16px; font-weight: 600; margin: 24px 0 8px; color: var(--accent); }
+    p { color: var(--muted); margin-bottom: 12px; }
+    ul, ol { color: var(--muted); padding-left: 20px; margin-bottom: 12px; }
+    li { margin-bottom: 4px; }
+    a { color: var(--accent); }
+
+    code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; background: var(--bg3); padding: 1px 6px; border-radius: 4px; color: var(--text); }
+    pre { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; overflow-x: auto; margin: 16px 0; }
+    pre code { background: none; padding: 0; font-size: 13px; line-height: 1.7; }
+
+    .cmd-block { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin: 16px 0; }
+    .cmd-title { font-size: 13px; font-weight: 600; color: var(--text); font-family: monospace; margin-bottom: 12px; }
+    .flag { display: grid; grid-template-columns: 220px 1fr; gap: 8px; font-size: 13px; padding: 4px 0; }
+    .flag code { background: none; padding: 0; color: var(--accent); }
+    .flag span { color: var(--muted); }
+
+    .callout { border-radius: 8px; padding: 16px 20px; margin: 16px 0; border-left: 3px solid; }
+    .callout.warn { background: rgba(210,153,34,0.08); border-color: var(--yellow); }
+    .callout.tip { background: rgba(63,185,80,0.08); border-color: var(--green); }
+    .callout.danger { background: rgba(248,81,73,0.08); border-color: var(--red); }
+    .callout p { margin: 0; font-size: 14px; }
+    .callout strong { color: var(--text); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0; }
+    th { text-align: left; padding: 8px 12px; background: var(--bg3); color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
+    td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+    td:first-child { color: var(--text); font-family: monospace; font-size: 12px; }
+    tr:last-child td { border-bottom: none; }
+
+    .severity { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+    .critical { background: rgba(248,81,73,0.15); color: var(--red); }
+    .high { background: rgba(219,109,40,0.15); color: var(--orange); }
+    .medium { background: rgba(210,153,34,0.15); color: var(--yellow); }
+
+    .top-bar { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 12px 64px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 10; }
+    .top-bar a { color: var(--muted); text-decoration: none; font-size: 14px; }
+    .top-bar a:hover { color: var(--text); }
+    .top-bar .sep { color: var(--border); }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- Sidebar nav -->
+  <nav>
+    <div class="nav-logo">
+      <a href="/"><span>🔒</span> SecretGuard</a>
+    </div>
+
+    <h3>Getting Started</h3>
+    <a href="#install">Installation</a>
+    <a href="#quickstart">Quick Start</a>
+    <a href="#philosophy">Philosophy</a>
+
+    <h3>CLI Reference</h3>
+    <a href="#scan">secretguard scan</a>
+    <a href="#audit">secretguard audit</a>
+    <a href="#hook">secretguard hook</a>
+    <a href="#init">secretguard init</a>
+    <a href="#fix">secretguard fix</a>
+    <a href="#baseline">secretguard baseline</a>
+    <a href="#ci">secretguard ci</a>
+
+    <h3>Features</h3>
+    <a href="#patterns">44 Secret Patterns</a>
+    <a href="#verification">Live Verification</a>
+    <a href="#bypass">Bypass Detection <span class="badge">NEW</span></a>
+    <a href="#blast-radius">Blast Radius <span class="badge">NEW</span></a>
+    <a href="#watch">Watch Mode <span class="badge">NEW</span></a>
+    <a href="#notifications">Notifications</a>
+    <a href="#vscode">VS Code Extension</a>
+
+    <h3>Integrations</h3>
+    <a href="#github-actions">GitHub Actions</a>
+    <a href="#gitlab">GitLab CI</a>
+    <a href="#sarif">SARIF / Code Scanning</a>
+
+    <h3>Configuration</h3>
+    <a href="#ignore">Ignore File</a>
+    <a href="#env">Environment Vars</a>
+  </nav>
+
+  <!-- Main content -->
+  <main>
+    <h1>SecretGuard Documentation</h1>
+    <p>CLI reference for SecretGuard v1.0.0 — 44 patterns, live API verification, bypass detection.</p>
+
+    <!-- Install -->
+    <h2 id="install">Installation</h2>
+    <pre><code>npm install -g secretguard</code></pre>
+    <p>Requires Node.js 16+. After install, <code>secretguard</code> is available globally.</p>
+
+    <h3>Verify install</h3>
+    <pre><code>secretguard --version
+# 1.0.0</code></pre>
+
+    <!-- Quick start -->
+    <h2 id="quickstart">Quick Start</h2>
+    <pre><code># Set up in your repo (installs pre-commit hook + patches .gitignore)
+cd your-project
+secretguard init
+
+# Scan now
+secretguard scan .
+
+# Watch mode — rescan on every file save
+secretguard scan --watch .
+
+# Scan only what you're about to commit
+secretguard scan --staged</code></pre>
+
+    <div class="callout tip">
+      <p><strong>One command setup.</strong> <code>secretguard init</code> installs the pre-commit hook, creates <code>.secretguardignore</code>, and adds <code>.env</code>, <code>*.pem</code>, <code>*.key</code> to <code>.gitignore</code> automatically.</p>
+    </div>
+
+    <!-- Philosophy -->
+    <h2 id="philosophy">Philosophy</h2>
+    <p>SecretGuard is <strong>prevention-first</strong>. Most tools detect secrets after the fact. SecretGuard blocks the commit:</p>
+    <ol>
+      <li><strong>Pre-commit hook</strong> — blocks commit if secrets found. Developer must fix before pushing.</li>
+      <li><strong>Post-commit bypass detection</strong> — if developer uses <code>--no-verify</code>, post-commit hook scans the committed diff and fires team notifications immediately.</li>
+      <li><strong>CI/CD scan</strong> — catches anything that slipped through in PRs and merges.</li>
+      <li><strong>History audit</strong> — <code>secretguard audit</code> scans all commits for secrets that entered git history at any point.</li>
+    </ol>
+    <p>Raw secret values are never printed. All matches are masked: <code>ghp_****YZ01</code>.</p>
+
+    <!-- scan -->
+    <h2 id="scan">secretguard scan</h2>
+    <p>Scan a directory or file for secrets.</p>
+    <pre><code>secretguard scan [path] [flags]</code></pre>
+
+    <div class="cmd-block">
+      <div class="flag"><code>path</code><span>Directory or file to scan. Default: <code>.</code></span></div>
+      <div class="flag"><code>--staged</code><span>Scan only git staged files (used by pre-commit hook)</span></div>
+      <div class="flag"><code>--last-commit</code><span>Scan the last committed diff — catches <code>--no-verify</code> bypasses</span></div>
+      <div class="flag"><code>--watch</code><span>Watch mode — rescan on file save, debounced 300ms</span></div>
+      <div class="flag"><code>--fail-on=critical,high</code><span>Exit 1 if severity matches. Default: <code>critical</code></span></div>
+      <div class="flag"><code>--format=table|json|sarif</code><span>Output format. Default: <code>table</code></span></div>
+      <div class="flag"><code>--output=file.sarif</code><span>Write output to file instead of stdout</span></div>
+      <div class="flag"><code>--fix</code><span>Show remediation steps after scan</span></div>
+      <div class="flag"><code>--no-verify</code><span>Skip live API verification (faster, offline)</span></div>
+      <div class="flag"><code>--quiet</code><span>Suppress banner and status messages (for scripts)</span></div>
+    </div>
+
+    <h3>Examples</h3>
+    <pre><code>secretguard scan .
+secretguard scan src/config.js --fix
+secretguard scan --staged --fail-on=critical,high
+secretguard scan . --format=json | jq '.findings[].severity'
+secretguard scan . --format=sarif --output=results.sarif
+secretguard scan --watch src/</code></pre>
+
+    <!-- audit -->
+    <h2 id="audit">secretguard audit</h2>
+    <p>Scan the full git commit history. Finds secrets that were committed and later deleted — they remain accessible in git history.</p>
+    <pre><code>secretguard audit [flags]</code></pre>
+
+    <div class="cmd-block">
+      <div class="flag"><code>--max-commits=500</code><span>Limit commits scanned. Default: <code>500</code></span></div>
+      <div class="flag"><code>--since="6 months ago"</code><span>Only scan commits since date</span></div>
+      <div class="flag"><code>--format=table|json|sarif</code><span>Output format</span></div>
+      <div class="flag"><code>--fix</code><span>Show remediation steps</span></div>
+    </div>
+
+    <div class="callout warn">
+      <p><strong>Secrets in git history remain accessible</strong> even after deletion from working tree. Use <a href="https://github.com/newren/git-filter-repo">git-filter-repo</a> or BFG Repo Cleaner to purge them, then rotate all affected keys.</p>
+    </div>
+
+    <!-- hook -->
+    <h2 id="hook">secretguard hook</h2>
+    <p>Manage the pre-commit and post-commit git hooks. <code>secretguard init</code> calls this automatically.</p>
+    <pre><code>secretguard hook install      # installs pre-commit + post-commit hooks
+secretguard hook uninstall    # removes hooks (only if installed by SecretGuard)</code></pre>
+
+    <div class="callout tip">
+      <p><strong>Two hooks installed.</strong> <code>pre-commit</code> blocks commits with secrets. <code>post-commit</code> scans the committed diff and alerts the team if <code>--no-verify</code> was used to bypass.</p>
+    </div>
+
+    <!-- init -->
+    <h2 id="init">secretguard init</h2>
+    <p>One-command setup for a new repo.</p>
+    <pre><code>secretguard init</code></pre>
+    <p>Does three things:</p>
+    <ol>
+      <li>Installs pre-commit and post-commit hooks via <code>secretguard hook install</code></li>
+      <li>Creates <code>.secretguardignore</code> with sensible defaults</li>
+      <li>Appends missing entries (<code>.env</code>, <code>*.pem</code>, <code>*.key</code>, <code>.aws/credentials</code>) to <code>.gitignore</code></li>
+    </ol>
+
+    <!-- fix -->
+    <h2 id="fix">secretguard fix</h2>
+    <p>Show actionable remediation steps for all detected secrets.</p>
+    <pre><code>secretguard fix [path]</code></pre>
+    <p>Each finding gets numbered steps specific to its provider — not generic advice. Example for a GitHub token:</p>
+    <pre><code>  GitHub Personal Access Token
+    1. Go to GitHub → Settings → Developer settings → Personal access tokens
+    2. Delete or regenerate this token immediately
+    3. Use: export GITHUB_TOKEN=&lt;new-token&gt; or store in .env (gitignored)
+    4. Consider using GitHub Actions secrets for CI workflows</code></pre>
+
+    <!-- baseline -->
+    <h2 id="baseline">secretguard baseline</h2>
+    <p>Suppress existing findings that are false positives or already queued for rotation. New findings after the baseline is created are still blocked.</p>
+    <pre><code>secretguard baseline generate [path]   # scan and create .secretguardbaseline
+secretguard baseline status             # list suppressed findings
+secretguard baseline clear              # remove baseline (re-report everything)</code></pre>
+
+    <p>The <code>.secretguardbaseline</code> file stores fingerprints (file + line + rule + masked match), not raw secret values. Commit it to your repo so the whole team shares the same suppressions.</p>
+
+    <div class="callout warn">
+      <p><strong>Baseline ≠ "it's fine".</strong> Baselined secrets still need to be rotated. The baseline gives you time to do it without blocking every developer on every commit.</p>
+    </div>
+
+    <!-- ci -->
+    <h2 id="ci">secretguard ci</h2>
+    <p>Print a ready-to-use CI/CD config template.</p>
+    <pre><code>secretguard ci github-actions
+secretguard ci gitlab-ci
+secretguard ci pre-commit-config</code></pre>
+
+    <!-- patterns -->
+    <h2 id="patterns">44 Secret Patterns</h2>
+    <p>Patterns are grouped by precision. Prefix-specific patterns (AWS <code>AKIA</code>, GitHub <code>ghp_</code>, HuggingFace <code>hf_</code>) skip entropy checks — the prefix itself is sufficiently precise. Generic patterns use Shannon entropy to filter low-entropy false positives.</p>
+
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Severity</th></tr></thead>
+      <tbody>
+        <tr><td>aws-access-key</td><td>AWS Access Key ID</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>aws-secret-key</td><td>AWS Secret Access Key</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>aws-session-token</td><td>AWS Session Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>github-token</td><td>GitHub PAT (ghp_, ghs_, gho_, etc.)</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>github-oauth</td><td>GitHub OAuth Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>gitlab-pat</td><td>GitLab Personal Access Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>google-api-key</td><td>Google API Key</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>firebase-service-account</td><td>Firebase/GCP Service Account JSON</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>stripe-secret</td><td>Stripe Secret Key</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>stripe-publishable</td><td>Stripe Publishable Key</td><td><span class="severity medium">medium</span></td></tr>
+        <tr><td>shopify-token</td><td>Shopify Access Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>shopify-shared-secret</td><td>Shopify Shared Secret</td><td><span class="severity high">high</span></td></tr>
+        <tr><td>openai-key</td><td>OpenAI API Key</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>anthropic-key</td><td>Anthropic API Key</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>huggingface-token</td><td>HuggingFace API Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>cohere-key</td><td>Cohere API Key</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>replicate-token</td><td>Replicate API Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>slack-token</td><td>Slack Token (xoxb-, xoxa-, etc.)</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>slack-webhook</td><td>Slack Webhook URL</td><td><span class="severity high">high</span></td></tr>
+        <tr><td>db-connection-string</td><td>Database Connection String</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>supabase-service-key</td><td>Supabase Service Role Key</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>azure-storage-key</td><td>Azure Storage Account Key</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>azure-sas-token</td><td>Azure SAS Token</td><td><span class="severity high">high</span></td></tr>
+        <tr><td>digitalocean-token</td><td>DigitalOcean Personal Access Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>heroku-api-key</td><td>Heroku API Key</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>vercel-token</td><td>Vercel API Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>databricks-token</td><td>Databricks API Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>okta-token</td><td>Okta API Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>circleci-token</td><td>CircleCI API Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>datadog-api-key</td><td>Datadog API Key</td><td><span class="severity high">high</span></td></tr>
+        <tr><td>linear-api-key</td><td>Linear API Key</td><td><span class="severity high">high</span></td></tr>
+        <tr><td>sendgrid-key</td><td>SendGrid API Key</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>twilio-key</td><td>Twilio API Key</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>npm-token</td><td>npm Access Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>private-key</td><td>Private Key (PEM)</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>jwt-token</td><td>JSON Web Token</td><td><span class="severity high">high</span></td></tr>
+        <tr><td>password-hardcoded</td><td>Hardcoded Password</td><td><span class="severity high">high</span></td></tr>
+        <tr><td>hashicorp-vault-token</td><td>HashiCorp Vault Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>doppler-token</td><td>Doppler Service Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>cloudflare-token</td><td>Cloudflare API Token</td><td><span class="severity critical">critical</span></td></tr>
+        <tr><td>posthog-key</td><td>PostHog API Key</td><td><span class="severity high">high</span></td></tr>
+        <tr><td>docker-auth</td><td>Docker Hub Auth Token</td><td><span class="severity high">high</span></td></tr>
+        <tr><td>generic-api-key</td><td>Generic API Key Assignment</td><td><span class="severity high">high</span></td></tr>
+        <tr><td>generic-secret</td><td>Generic Secret Assignment</td><td><span class="severity medium">medium</span></td></tr>
+      </tbody>
+    </table>
+
+    <!-- verification -->
+    <h2 id="verification">Live API Verification</h2>
+    <p>SecretGuard makes safe read-only API calls to confirm if detected credentials are still active:</p>
+    <ul>
+      <li><strong>GitHub</strong> — <code>GET /user</code></li>
+      <li><strong>Slack</strong> — <code>auth.test</code></li>
+      <li><strong>Stripe</strong> — <code>GET /v1/charges</code> with 0 limit</li>
+      <li><strong>Google</strong> — Maps Geocoding API probe</li>
+    </ul>
+    <p>Use <code>--no-verify</code> to skip (faster, works offline). Results show inline:</p>
+    <pre><code>  VERIFIED ACTIVE — revoke immediately
+  ✓ Verified inactive (key revoked or invalid)</code></pre>
+
+    <!-- bypass -->
+    <h2 id="bypass">Bypass Detection</h2>
+    <p>When a developer uses <code>git commit --no-verify</code>, the pre-commit hook is skipped. SecretGuard installs a <code>post-commit</code> hook that runs after every commit and scans the committed diff.</p>
+    <p>If secrets are found in a <code>--no-verify</code> commit, the post-commit hook:</p>
+    <ol>
+      <li>Prints a loud warning with <code>BYPASS DETECTED</code> banner</li>
+      <li>Fires Slack/webhook/email notification with <code>"event": "bypass_commit"</code></li>
+    </ol>
+    <pre><code>secretguard scan --last-commit    # manually trigger bypass check</code></pre>
+
+    <!-- blast radius -->
+    <h2 id="blast-radius">Blast Radius</h2>
+    <p>Every finding shows <em>what an attacker can do with that credential</em> — not just "this looks like a key":</p>
+    <pre><code>  impact:  Full access to Stripe account: create charges on customer cards,
+           exfiltrate all payment data, issue refunds, create payouts to
+           attacker bank account, access PII of all customers.</code></pre>
+
+    <!-- watch -->
+    <h2 id="watch">Watch Mode</h2>
+    <p>Real-time scanning as you edit files.</p>
+    <pre><code>secretguard scan --watch .
+secretguard scan --watch src/</code></pre>
+    <p>Rescans on every file save, debounced 300ms. Shows timestamp per change:</p>
+    <pre><code>  ✓ [14:32:01] config.js — clean
+  ⚠ [14:32:45] auth.js — 1 finding (GitHub token)</code></pre>
+
+    <!-- notifications -->
+    <h2 id="notifications">Notifications</h2>
+    <p>Set environment variables to alert your team in real time:</p>
+    <pre><code># Slack
+export SECRETGUARD_SLACK_WEBHOOK=https://hooks.slack.com/services/...
+
+# Custom webhook (PagerDuty, internal tooling, etc.)
+export SECRETGUARD_WEBHOOK_URL=https://your-server.com/alerts
+export SECRETGUARD_WEBHOOK_TOKEN=optional-bearer-token
+
+# Email (direct SMTP — no relay service needed)
+export SECRETGUARD_SMTP_HOST=smtp.gmail.com
+export SECRETGUARD_SMTP_PORT=587
+export SECRETGUARD_SMTP_USER=you@gmail.com
+export SECRETGUARD_SMTP_PASS=your-app-password
+export SECRETGUARD_EMAIL_TO=security@yourcompany.com
+export SECRETGUARD_EMAIL_FROM=secretguard@yourcompany.com</code></pre>
+
+    <!-- VS Code -->
+    <h2 id="vscode">VS Code Extension</h2>
+    <p>Real-time secret detection in the editor. Scans as you type (debounced 800ms on change, immediate on save).</p>
+    <ul>
+      <li>Red/yellow squiggles on secret lines in the editor</li>
+      <li>Problems panel integration with clickable findings</li>
+      <li>Status bar: <code>🔒 SecretGuard: 3 secrets</code> → red when secrets found</li>
+      <li>Right-click → "SecretGuard: Ignore this finding" → adds to <code>.secretguardignore</code></li>
+      <li>Command palette: <code>SecretGuard: Scan Workspace</code></li>
+    </ul>
+    <p>Uses the same 44-pattern engine as the CLI — inline, no subprocess, fast.</p>
+
+    <!-- GitHub Actions -->
+    <h2 id="github-actions">GitHub Actions</h2>
+    <pre><code>- name: Install SecretGuard
+  run: npm install -g secretguard
+
+- name: Scan for secrets
+  run: secretguard scan . --fail-on=critical,high --format=sarif --output=secretguard.sarif
+
+- name: Upload to GitHub Security
+  uses: github/codeql-action/upload-sarif@v3
+  if: always()
+  with:
+    sarif_file: secretguard.sarif</code></pre>
+
+    <!-- GitLab -->
+    <h2 id="gitlab">GitLab CI</h2>
+    <pre><code>secret-scan:
+  image: node:20-alpine
+  script:
+    - npm install -g secretguard
+    - secretguard scan . --fail-on=critical,high
+  only:
+    - merge_requests
+    - main</code></pre>
+
+    <!-- SARIF -->
+    <h2 id="sarif">SARIF / GitHub Code Scanning</h2>
+    <p>SARIF 2.1.0 output integrates with GitHub Code Scanning for inline PR annotations. Each finding gets a fingerprint for deduplication across runs.</p>
+    <pre><code>secretguard scan . --format=sarif --output=results.sarif</code></pre>
+
+    <!-- Ignore file -->
+    <h2 id="ignore">Ignore File</h2>
+    <p>Create <code>.secretguardignore</code> in your repo root to skip files or directories:</p>
+    <pre><code># .secretguardignore
+test/fixtures/
+*.example
+*.sample
+mock-data/
+docs/</code></pre>
+    <p>The scanner also respects <code>.gitignore</code> automatically. Binary files, <code>node_modules</code>, <code>dist</code>, <code>.next</code>, <code>build</code>, and <code>coverage</code> dirs are always skipped.</p>
+
+    <!-- Env vars -->
+    <h2 id="env">Environment Variables</h2>
+    <table>
+      <thead><tr><th>Variable</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>SECRETGUARD_SLACK_WEBHOOK</td><td>Slack incoming webhook URL for alerts</td></tr>
+        <tr><td>SECRETGUARD_WEBHOOK_URL</td><td>Custom HTTP webhook endpoint</td></tr>
+        <tr><td>SECRETGUARD_WEBHOOK_TOKEN</td><td>Bearer token for custom webhook auth</td></tr>
+        <tr><td>SECRETGUARD_SMTP_HOST</td><td>SMTP server hostname for email alerts</td></tr>
+        <tr><td>SECRETGUARD_SMTP_PORT</td><td>SMTP port (default: 587)</td></tr>
+        <tr><td>SECRETGUARD_SMTP_USER</td><td>SMTP username</td></tr>
+        <tr><td>SECRETGUARD_SMTP_PASS</td><td>SMTP password / app password</td></tr>
+        <tr><td>SECRETGUARD_EMAIL_TO</td><td>Alert recipient email address</td></tr>
+        <tr><td>SECRETGUARD_EMAIL_FROM</td><td>Sender address for alerts</td></tr>
+      </tbody>
+    </table>
+  </main>
+</div>
+
+<script>
+  // Highlight active nav link based on scroll position
+  const sections = document.querySelectorAll('h2[id]');
+  const navLinks = document.querySelectorAll('nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const link = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
