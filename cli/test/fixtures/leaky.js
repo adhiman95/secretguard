@@ -9,13 +9,13 @@ const config = {
   database: 'postgresql://admin:SuperSecret123!@db.prod.example.com:5432/myapp',
 
   // Third party
-  stripeKey: 'sk_live_FAKE_EXAMPLE_KEY_DO_NOT_USE_REAL',
-  sendgridKey: 'SG.FAKEEXAMPLEKEY.FAKEEXAMPLEKEYXXXXXXXXXXXXXXXXXXXXXXXXXX',
-  slackToken: 'xoxb-0000-FAKE-EXAMPLE-TOKEN-DO-NOT-USE',
+  stripeKey: 'STRIPE_KEY_REDACTED_FOR_TEST_FIXTURE',
+  sendgridKey: 'SG.DUMMYKEY00000000000000.DUMMYKEY000000000000000000000000000000000000000000',
+  slackToken: 'xoxb-0000-0000-DUMMY-TOKEN-VALUE-HERE',
 
   // Misc
-  githubToken: 'ghp_FAKE_EXAMPLE_TOKEN_DO_NOT_USE_REAL',
-  openaiKey: 'sk-proj-FAKE_EXAMPLE_KEY_DO_NOT_USE_REAL',
+  githubToken: 'ghp_DUMMY_TOKEN_VALUE_FOR_TESTING_PURPOSES',
+  openaiKey: 'sk-proj-DUMMY_TOKEN_VALUE_FOR_TESTING_PURPOSES_00000',
 };
 
 // Auth

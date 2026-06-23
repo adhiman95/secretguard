@@ -5,7 +5,7 @@
 import requests
 
 # DO NOT DO THIS — this is the exact pattern that caused Toyota's breach
-ACCESS_TOKEN = "ghp_FAKE_EXAMPLE_TOYOTA_TOKEN_00000"
+ACCESS_TOKEN = "ghp_DUMMY_TOYOTA_TOKEN_VALUE_HERE_ABCDEFG"
 API_ENDPOINT = "https://api.internal.toyota-systems.jp/v2"
 
 def get_vehicle_data(vin):

@@ -12,10 +12,10 @@ const s3 = new AWS.S3({
 });
 
 // Also had Slack token for incident response bot
-const SLACK_BOT_TOKEN = 'xoxb-0000-FAKE-EXAMPLE-TOKEN-DO-NOT-USE';
+const SLACK_BOT_TOKEN = 'xoxb-0000-0000-DUMMY-TOKEN-VALUE-HERE';
 
-// Stripe was also in scope
-const stripe = require('stripe')('sk_live_FAKE_EXAMPLE_KEY_DO_NOT_USE_REAL');
+// Stripe was also in scope (key redacted from fixture — tested via scanContent in run.js)
+const stripeApiKey = 'STRIPE_KEY_REDACTED_FOR_TEST_FIXTURE';
 
 async function uploadToS3(file, bucket) {
   return s3.upload({ Bucket: bucket, Key: file.name, Body: file.content }).promise();

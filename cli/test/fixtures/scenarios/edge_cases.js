@@ -1,14 +1,14 @@
 // Edge cases — tests subtle detection scenarios
 
 // 1. Secret split across variable assignment (some tools miss this)
-const part1 = 'sk_live_FAKE_';
-const stripeKey = part1 + 'EXAMPLEKEY000000000000'; // split — hard to detect statically
+const part1 = 'sk_live_DUMMY';
+const stripeKey = part1 + 'KEYVALUEFORTESTING000000'; // split — hard to detect statically
 
 // 2. Secret in object destructuring
-const { GITHUB_TOKEN: ghToken = 'ghp_FAKE_EXAMPLE_EDGE_CASE_00000' } = process.env;
+const { GITHUB_TOKEN: ghToken = 'ghp_DUMMY_EDGE_CASE_TOKEN_VALUE_FOR_TESTING_00' } = process.env;
 
 // 3. Secret in template literal (should detect)
-const authHeader = `Bearer ghp_FAKE_EXAMPLE_TEMPLATE_TOKEN_000`;
+const authHeader = `Bearer ghp_DUMMY_TEMPLATE_TOKEN_VALUE_FOR_TESTING_00`;
 
 // 4. Multiline secret assignment
 const awsSecret =
@@ -16,17 +16,17 @@ const awsSecret =
   '/K7MDENG/bPxRfi'; // split string — static analysis can't fully reassemble
 
 // 5. Secret in JSON config embedded in JS
-const config = JSON.parse('{"api_key": "AIzaSyFAKE_EXAMPLE_GOOGLE_KEY_0000"}');
+const config = JSON.parse('{"api_key": "AIzaSyDUMMY_GOOGLE_KEY_VALUE_HERE_00000"}');
 
 // 6. Secret in array
 const keys = [
-  'ghp_FAKE_EXAMPLE_ARRAY_TOKEN_0000',
+  'ghp_DUMMY_ARRAY_TOKEN_VALUE_FOR_TESTING_000',
   process.env.BACKUP_KEY
 ];
 
 // 7. Secret assigned via ternary
 const apiKey = process.env.NODE_ENV === 'test'
-  ? 'sk_test_FAKE_EXAMPLE_TERNARY_KEY_000'
+  ? 'sk_test_DUMMYKEYVALUEFORTESTING000000'
   : process.env.STRIPE_KEY;
 
 // 8. Double-encoded looking value (not a real secret — high entropy string)

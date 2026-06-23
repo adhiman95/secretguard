@@ -26,5 +26,5 @@ jobs:
       # BAD: hardcoded npm token (seen in supply chain attacks)
       - name: Publish
         run: |
-          echo "//registry.npmjs.org/:_authToken=npm_FAKE_EXAMPLE_TOKEN_0000000000" > ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=npm_DUMMYTOKENVALUEFORTESTINGPURPOSES000" > ~/.npmrc
           npm publish
