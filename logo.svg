@@ -1,0 +1,13 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shield body -->
+  <path d="M200 20 L360 80 L360 220 Q360 320 200 370 Q40 320 40 220 L40 80 Z" fill="#0ea5e9"/>
+  <!-- Inner shield -->
+  <path d="M200 44 L336 98 L336 220 Q336 306 200 348 Q64 306 64 220 L64 98 Z" fill="#0284c7"/>
+  <!-- Lock body -->
+  <rect x="158" y="220" width="84" height="68" rx="10" fill="#f0f9ff"/>
+  <!-- Lock shackle -->
+  <path d="M174 220 L174 188 Q174 158 200 158 Q226 158 226 188 L226 220" fill="none" stroke="#f0f9ff" stroke-width="16" stroke-linecap="round"/>
+  <!-- Lock keyhole -->
+  <circle cx="200" cy="248" r="12" fill="#0284c7"/>
+  <rect x="194" y="248" width="12" height="22" rx="4" fill="#0284c7"/>
+</svg>

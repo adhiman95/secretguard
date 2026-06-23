@@ -5,6 +5,7 @@
   "bin": {
     "secretguard": "./bin/secretguard.js"
   },
+  "icon": "icon.png",
   "main": "./lib/index.js",
   "scripts": {
     "test": "node test/run.js",
@@ -28,7 +29,8 @@
   "files": [
     "bin/",
     "lib/",
-    "README.md"
+    "README.md",
+    "icon.png"
   ],
   "dependencies": {
     "chalk": "^5.3.0",
