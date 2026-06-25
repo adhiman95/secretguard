@@ -214,7 +214,7 @@ const PATTERNS = [
     id: 'generic-secret',
     name: 'Generic Secret Assignment',
     severity: 'medium',
-    pattern: /(?:secret|token|auth[_\-.]?key)\s*[=:]\s*["']([A-Za-z0-9\-_\/+=]{16,80})["']/gi,
+    pattern: /(?:secret|token|auth[_\-.]?key)\s*[=:]\s*["']([A-Za-z0-9\-_\/+=]{20,80})["']/gi,
     entropy: 3.8,
     remediate: [
       'Move to environment variable or secrets manager',

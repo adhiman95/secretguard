@@ -3,7 +3,7 @@ const path = require('path');
 const { PATTERNS, shannonEntropy } = require('./patterns');
 
 const SKIP_DIRS = new Set(['.git', 'node_modules', '.next', 'dist', 'build', '__pycache__', '.venv', 'venv', 'vendor', 'coverage', '.nyc_output']);
-const SKIP_EXTS = new Set(['.png', '.jpg', '.jpeg', '.gif', '.ico', '.svg', '.woff', '.woff2', '.ttf', '.eot', '.mp4', '.mp3', '.zip', '.tar', '.gz', '.pdf', '.lock']);
+const SKIP_EXTS = new Set(['.png', '.jpg', '.jpeg', '.gif', '.ico', '.svg', '.woff', '.woff2', '.ttf', '.eot', '.mp4', '.mp3', '.zip', '.tar', '.gz', '.pdf', '.lock', '.md', '.mdx', '.rst', '.txt']);
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
 function shouldSkipPath(filePath) {
@@ -100,7 +100,10 @@ function scanContent(content, filePath, options = {}) {
 
       // Skip obvious test/placeholder values
       const lower = matchStr.toLowerCase();
-      if (lower.includes('example') || lower.includes('placeholder') || lower.includes('your-key') || lower.includes('xxxx') || matchStr.includes('****')) {
+      const PLACEHOLDER_WORDS = ['example', 'placeholder', 'your-key', 'your_key', 'your-token', 'your_token',
+        'your-secret', 'your_secret', 'xxxx', '****', 'changeme', 'change-me', 'replaceme', 'replace-me',
+        'enter-your', 'add-your', 'put-your', 'insert-your', '<your', '<token', '<secret', '<key', '<api'];
+      if (PLACEHOLDER_WORDS.some(w => lower.includes(w)) || matchStr.includes('<') || matchStr.includes('>') || matchStr.includes('{') || matchStr.includes('}')) {
         if (regex.lastIndex === match.index) regex.lastIndex++;
         continue;
       }
